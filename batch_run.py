@@ -2,6 +2,10 @@
 
 import os
 
+def __run(cmd):
+    print(cmd)
+    os.system(cmd)
+
 def __get_last_line(file_path):
     with open(file_path, "r") as f:
         last = None
@@ -28,11 +32,36 @@ def __get_int_folders():
             paths.append(base_dir + "/" + x)
     return paths
 
+def __clean_case():
+    int_folders = __get_int_folders()
+    for f in int_folders:
+        __run("rm -r " + f)
+    __run("rm -rf ./case/postProcessing")
+    __run("rm -rf case/constant/polyMesh")
+    __run("rm -f main.msh")
 
-int_folders = __get_int_folders()
-print(int_folders)
+def __change_aoa(aoa):
+    parameters_path = "./mesh/parameters.geo"
+    tmp_path = "./mesh/parameters.geo.tmp"
+    with open(tmp_path, "w") as w:
+        with open(parameters_path, "r") as r:
+            for line in r:
+                line = line.strip()
+                if "globalAoa" in line:
+                    line = line.split()
+                    line[2] = str(aoa) + ";"
+                    line = " ".join(line)
+                w.write(line + "\n")
+    __run("mv " + tmp_path + " " + parameters_path)
+
+def __run_aoa(aoa):
+    __clean_case()
+    __change_aoa(aoa)
+    __run("./run.sh")
 
 # positive
-coeffs = __get_coeffs("./case/postProcessing/forceCoeffs1/0/forceCoeffs.dat")
-print(coeffs)
+#coeffs = __get_coeffs("./case/postProcessing/forceCoeffs1/0/forceCoeffs.dat")
+#print(coeffs)
+
+#__change_aoa(13)
 
