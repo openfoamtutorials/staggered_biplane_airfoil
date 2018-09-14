@@ -2,6 +2,7 @@ Include "Vector.geo";
 
 Macro RotatePoint
     pointId = Arguments[0];
+    //Printf("%g", pointId);
     angle = Arguments[1];
     center[] = Arguments[{2:4}];
     Rotate {{0, 0, 1}, {center[0], center[1], center[2]}, angle}
@@ -11,9 +12,9 @@ Macro RotatePoint
 Return
 
 Macro RotateAirfoilPoint
-    // rotates pointId about quarter-chord.
+    // rotates pointId about origin.
     Arguments[1] *= -1.0;
-    Arguments[{2:4}] = {0.25 , 0, 0};
+    Arguments[{2:4}] = {0, 0, 0}; // rotation center.
     Call RotatePoint;
 Return
 
@@ -62,6 +63,7 @@ Macro ArcAirfoil
     Point(ce++) = {0, -0.5 * thickness, 0, bottomSurfaceLcFactor * lc};
     lePoints[] += ce - 1;
     For p In {0:2}
+        Printf("%g", leCenter);
         Arguments[] = {lePoints[p], airfoilSpan / 2, Point{leCenter}}; Call RotatePoint;
     EndFor
     allPoints[] += lePoints[];

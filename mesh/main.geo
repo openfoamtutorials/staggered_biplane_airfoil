@@ -6,13 +6,14 @@ Include "parameters.geo";
 
 ce = 0;
 
-Arguments[] = {0, bendHeight, thickness, AirfoilLc, 0, 0, 2};
-Call ArcAirfoil;
-AirfoilLoop = Results[0];
 
 Arguments[] = {0, bendHeight, thickness, AirfoilLc, biplaneStagger, biplaneGap, 2};
 Call ArcAirfoil;
 AirfoilLoop2 = Results[0];
+
+Arguments[] = {0, bendHeight, thickness, AirfoilLc, 0, 0, 2};
+Call ArcAirfoil;
+AirfoilLoop = Results[0];
 
 WindTunnelHeight = 20;
 WindTunnelLength = 40;
