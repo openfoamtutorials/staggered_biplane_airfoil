@@ -18,11 +18,10 @@ def __get_last_line(file_path):
 def __get_coeffs(file_path):
     coeffs = __get_last_line(file_path)
     coeffs = coeffs.strip().split()
-    coeffs = [float(x) for x in coeffs]
     cm = coeffs[1]
     cd = coeffs[2]
     cl = coeffs[3]
-    return (cm, cd, cl)
+    return (cm, cd, cl, coeffs[0])
 
 def __get_int_folders():
     paths = []
@@ -40,28 +39,36 @@ def __clean_case():
     __run("rm -rf case/constant/polyMesh")
     __run("rm -f main.msh")
 
-def __change_aoa(aoa):
+def __change_config(field, value):
     parameters_path = "./mesh/parameters.geo"
     tmp_path = "./mesh/parameters.geo.tmp"
     with open(tmp_path, "w") as w:
         with open(parameters_path, "r") as r:
             for line in r:
                 line = line.strip()
-                if "globalAoa" in line:
+                if field in line:
                     line = line.split()
-                    line[2] = str(aoa) + ";"
+                    line[2] = str(value) + ";"
                     line = " ".join(line)
                 w.write(line + "\n")
     __run("mv " + tmp_path + " " + parameters_path)
 
 def __run_aoa(aoa):
     __clean_case()
-    __change_aoa(aoa)
+    __change_config("globalAoa", aoa)
+    height = 0.1
+    if aoa < 0:
+        height *= -1
+    __change_config("bendHeight", height)
     __run("./run.sh")
 
-# positive
-#coeffs = __get_coeffs("./case/postProcessing/forceCoeffs1/0/forceCoeffs.dat")
-#print(coeffs)
+output_path = "results.txt"
+#for aoa in range(30):
+for aoa in range(30, 181, 5):
+    __clean_case()
+    __run_aoa(aoa)
+    coeffs = __get_coeffs("./case/postProcessing/forceCoeffs1/0/forceCoeffs.dat")
+    with open(output_path, "a") as f:
+        f.write(str(aoa) + "\t" + "\t".join(coeffs) + "\n")
 
-#__change_aoa(13)
-
+__clean_case()
