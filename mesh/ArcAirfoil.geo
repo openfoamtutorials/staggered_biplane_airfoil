@@ -2,7 +2,6 @@ Include "Vector.geo";
 
 Macro RotatePoint
     pointId = Arguments[0];
-    //Printf("%g", pointId);
     angle = Arguments[1];
     center[] = Arguments[{2:4}];
     Rotate {{0, 0, 1}, {center[0], center[1], center[2]}, angle}
@@ -60,10 +59,13 @@ Macro ArcAirfoil
     lePoints[] += ce - 1;
     Point(ce++) = {0, 0.5 * thickness, 0, lc};
     lePoints[] += ce - 1;
+    coord[] = Point{ce - 1};
+    Printf("%g, %g", ce - 1, thickness);
+    Printf("%g, %g, %g", coord[0], coord[1], coord[2]);
     Point(ce++) = {0, -0.5 * thickness, 0, bottomSurfaceLcFactor * lc};
     lePoints[] += ce - 1;
     For p In {0:2}
-        Printf("%g", leCenter);
+        Printf("%g", lePoints[p]);
         Arguments[] = {lePoints[p], airfoilSpan / 2, Point{leCenter}}; Call RotatePoint;
     EndFor
     allPoints[] += lePoints[];

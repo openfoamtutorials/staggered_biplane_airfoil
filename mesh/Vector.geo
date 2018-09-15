@@ -73,24 +73,13 @@ Macro Angle
     Results[0] += sign * Acos(dot);
 Return
 
-// Test Angle.
-// Arguments[] = {1, 0, 0, 0, -1, 0};
-// Call Angle;
-// Printf("%f", Results[0] / Pi * 180);
-
 Macro Rotated
     vector = Arguments[{0:2}];
     angle = Arguments[3]; // radians.
     Results[0] = vector[0] * Cos(angle) - vector[1] * Sin(angle);
     Results[1] = vector[0] * Sin(angle) + vector[1] * Cos(angle);
     Results[2] = 0;
-    // Printf("INFO: Rotated {%f, %f} by %f deg to {%f, %f}", vector[0], vector[1], angle / Pi * 180, Results[0], Results[1]);
 Return
-
-// Test Rotated.
-// Arguments[] = {1, 0, 0, 3 * Pi / 2.0};
-// Call Rotated;
-// Printf("%f, %f, %f", Results[0], Results[1], Results[2]);
 
 Macro Bisector
     start  = Arguments[{0:2}];
@@ -105,9 +94,3 @@ Macro Bisector
     Arguments[] = {firstVector[], angle / 2.0}; Call Rotated;
     Arguments[] = Results[]; Call Normalize;
 Return
-
-// Test Bisector.
-Arguments[] = {0, -1, 0, 0, 0, 0, -1, 0, 0}; Call Bisector;
-Printf("%f, %f, %f", Results[0], Results[1], Results[2]);
-
-
