@@ -30,22 +30,6 @@ if 180 not in aoa or -180 not in aoa:
         results.append(new_result)
         with open("results.txt", "a") as f:
             f.write("\n" + "\t".join([str(x) for x in new_result]))
-if 0 not in aoa:
-    print("Did not find AOA at 0.")
-    positive = [x for x in results if x[0] > 0]
-    positive.sort()
-    negative = [x for x in results if x[0] < 0]
-    negative.sort()
-    if positive[0][0] != -negative[-1][0]:
-        print("we expect aoa closest to 0 have same magnitude: " + str(positive[0][0]) + ", " + str(negative[-1][0]))
-        print("assumption broken! cannot compute performance at aoa=0.")
-    cm = 0.5 * (positive[0][1] + negative[-1][1])
-    cd = 0.5 * (positive[0][2] + negative[-1][2])
-    cl = 0.5 * (positive[0][3] + negative[-1][3])
-    new_result = [0, cm, cd, cl]
-    results.append(new_result)
-    with open("results.txt", "a") as f:
-        f.write("\n" + "\t".join([str(x) for x in new_result]))
 
 aoa = [x[0] for x in results]
 cl = [x[3] for x in results]

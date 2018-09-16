@@ -63,15 +63,14 @@ def __run_aoa(aoa):
     __run("./run.sh")
 
 output_path = "results.txt"
-#for aoa in range(30):
-#for aoa in range(30, 181, 5):
-#for aoa in range(90, 181, 5):
+#for aoa in range(1, 30):
+#for aoa in range(30, 180, 5):
+#for aoa in range(90, 180, 5):
 #for aoa in range(-1, -30, -1):
-for aoa in range(-30, -181, -5):
+for aoa in range(-30, -180, -5):
     __clean_case()
     __run_aoa(aoa)
     coeffs = __get_coeffs("./case/postProcessing/forceCoeffs1/0/forceCoeffs.dat")
     with open(output_path, "a") as f:
         f.write(str(aoa) + "\t" + "\t".join(coeffs) + "\n")
-
 __clean_case()
