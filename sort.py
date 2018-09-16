@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 lines = open("results.txt", "r").readlines()
 lines = [line.split() for line in lines]
 lines = [[float(x) for x in line] for line in lines]
@@ -10,4 +12,5 @@ with open("results.txt.tmp", "w") as w:
     for line in lines[1:]:
         line = [str(x) for x in line]
         w.write("\n" + "\t".join(line))
+os.system("mv results.txt.tmp results.txt")
 
