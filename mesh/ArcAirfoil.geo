@@ -10,11 +10,29 @@ Macro RotatePoint
     }
 Return
 
+Macro RotatePoints
+    angle = Arguments[0];
+    center[] = Arguments[{1:3}];
+    pointIds[] = Arguments[{4 : #Arguments[] - 1}];
+    Rotate {{0, 0, 1}, {center[0], center[1], center[2]}, angle}
+    {
+        Point{pointIds[]};
+    }
+Return
+
 Macro RotateAirfoilPoint
     // rotates pointId about origin.
     Arguments[1] *= -1.0;
     Arguments[{2:4}] = {0, 0, 0}; // rotation center.
     Call RotatePoint;
+Return
+
+Macro RotateAirfoilPoints
+    // rotates pointId about origin.
+    Arguments[0] *= -1.0;
+    Arguments[{1:3}] = {0, 0, 0}; // rotation center.
+    Arguments[{4 : #Arguments[] - 1}] = Arguments[{4 : #Arguments[] - 1}];
+    Call RotatePoints;
 Return
 
 Macro TranslatePoint
@@ -55,19 +73,14 @@ Macro ArcAirfoil
     allPoints[] += {arcCenter};
 
     lePoints[] = {};
-    Point(ce++) = {-0.5 * thickness, 0, 0, lc};
+    h = 0.5 * thickness;
+    Point(ce++) = {-h, 0, 0, lc};
     lePoints[] += ce - 1;
-    Point(ce++) = {0, 0.5 * thickness, 0, lc};
+    Point(ce++) = {0, h, 0, lc};
     lePoints[] += ce - 1;
-    coord[] = Point{ce - 1};
-    Printf("%g, %g", ce - 1, thickness);
-    Printf("%g, %g, %g", coord[0], coord[1], coord[2]);
-    Point(ce++) = {0, -0.5 * thickness, 0, bottomSurfaceLcFactor * lc};
+    Point(ce++) = {0, -h, 0, bottomSurfaceLcFactor * lc};
     lePoints[] += ce - 1;
-    For p In {0:2}
-        Printf("%g", lePoints[p]);
-        Arguments[] = {lePoints[p], airfoilSpan / 2, Point{leCenter}}; Call RotatePoint;
-    EndFor
+    Arguments[] = {airfoilSpan / 2, Point{leCenter}, lePoints[]}; Call RotatePoints;
     allPoints[] += lePoints[];
 
     tePoints[] = {};
@@ -77,9 +90,7 @@ Macro ArcAirfoil
     tePoints[] += ce - 1;
     Point(ce++) = {1, -0.5 * thickness, 0, bottomSurfaceLcFactor * lc};
     tePoints[] += ce - 1;
-    For p In {0:2}
-        Arguments[] = {tePoints[p], -airfoilSpan / 2, Point{teCenter}}; Call RotatePoint;
-    EndFor
+    Arguments[] = {-airfoilSpan / 2, Point{teCenter}, tePoints[]}; Call RotatePoints;
     allPoints[] += tePoints[];
 
     For p In {0:#allPoints[] - 1}
@@ -92,10 +103,8 @@ Macro ArcAirfoil
         Call TranslatePoint;
     EndFor
 
-    For p In {0:#allPoints[] - 1}
-        Arguments[] = {allPoints[p], globalAoa * Pi / 180};
-        Call RotateAirfoilPoint;
-    EndFor
+    Arguments[] = {globalAoa * Pi / 180, 0, 0, 0, allPoints[]};
+    Call RotateAirfoilPoints;
 
     loopLines[] = {};
     Circle(ce++) = {tePoints[0], teCenter, tePoints[1]};

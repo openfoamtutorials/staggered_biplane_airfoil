@@ -38,4 +38,3 @@ Physical Surface("inlet") = {ids[4]};
 Physical Surface("airfoil") = {ids[{6:17}]};
 Physical Surface("frontAndBack") = {ids[0], TwoDimSurf};
 Physical Volume("volume") = {ids[1]};
-
