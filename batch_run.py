@@ -56,18 +56,19 @@ def __change_config(field, value):
 def __run_aoa(aoa):
     __clean_case()
     __change_config("globalAoa", aoa)
-    height = 0.1
+    height = 0.2
     if aoa < 0:
         height *= -1
     __change_config("bendHeight", height)
     __run("./run.sh")
 
 output_path = "results.txt"
-#for aoa in range(1, 30):
-#for aoa in range(30, 180, 5):
-#for aoa in range(90, 180, 5):
-#for aoa in range(-1, -30, -1):
-for aoa in range(-30, -180, -5):
+
+fine_positive = [x for x in range(1, 30)]
+fine_negative = [x for x in range(-1, -30, -1)]
+coarse_positive = [x for x in range(30, 180, 5)]
+coarse_negative = [x for x in range(-30, -180, -5)]
+for aoa in fine_positive + fine_negative:
     __clean_case()
     __run_aoa(aoa)
     coeffs = __get_coeffs("./case/postProcessing/forceCoeffs1/0/forceCoeffs.dat")
