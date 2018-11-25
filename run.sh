@@ -3,8 +3,8 @@
 # Quit script if any step has error:
 set -e
 
-# Make the mesh:
-gmsh -3 -o main.msh mesh/main.geo
+# Make the mesh (msh2 format is what gmshToFoam currently expects):
+gmsh -3 -o -format msh2 main.msh mesh/main.geo
 # Convert the mesh to OpenFOAM format:
 gmshToFoam main.msh -case case
 # Adjust polyMesh/boundary:
