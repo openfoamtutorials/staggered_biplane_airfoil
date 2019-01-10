@@ -67,14 +67,21 @@ os.system("touch " + output_path)
 
 fine_positive = [x for x in range(1, 30)]
 fine_negative = [x for x in range(-1, -30, -1)]
-coarse_positive = [x for x in range(30, 180, 5)]
-coarse_negative = [x for x in range(-30, -180, -5)]
+fine = [x for x in range(-29, 30)]
+coarse_positive = [x for x in range(30, 190, 5)]
+coarse_negative = [x for x in range(-30, -190, -5)]
+coarse = coarse_positive + coarse_negative
 lift_test = [x for x in range(10, 21)]
-#for aoa in fine_positive + fine_negative:
-#for aoa in coarse_positive + coarse_negative:
-#for aoa in fine_negative + coarse_positive + coarse_negative:
 non_test = coarse_negative + [x for x in range(-29, 10)] + [x for x in range(21, 30)] + coarse_positive
-for aoa in non_test:
+all_angles = coarse_negative + fine + coarse_positive
+for aoa in range(130, 190, 5):
+    # problematic AOAs.
+    if aoa == 0:
+        aoa += 0.1
+    if aoa == 90:
+        aoa += 1
+    if aoa == 130:
+        aoa += 1
     __clean_case()
     __run_aoa(aoa)
     coeffs = __get_coeffs("./case/postProcessing/forceCoeffs1/0/forceCoeffs.dat")
