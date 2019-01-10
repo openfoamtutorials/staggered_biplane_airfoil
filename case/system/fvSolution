@@ -46,7 +46,7 @@ solvers
 
 SIMPLE
 {
-    nNonOrthogonalCorrectors 0;
+    nNonOrthogonalCorrectors 1;
     pRefCell        0;
     pRefValue       0;
 
